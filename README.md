@@ -18,7 +18,7 @@ Data is transmitted through a http websocket pipe.
 This game uses standard data formats. Bytes are in **big endian** order. The size of each type might not be constant (eg. strings, varints).
 
 Name | Size (bytes) | Data range | Notes
--- | -- | -- | --
+--- | --- | --- | ---
 **uint8** | 1 | An integer between 0 and 255 | Unsigned 8-bit integer
 **uint16** | 2 | An integer between 0 and 65535 | Unsigned 16-bit integer
 **uint32** | 4 | An integer between 0 and 4294967295 | Unsigned 32-bit integer
@@ -34,7 +34,7 @@ Name | Size (bytes) | Data range | Notes
 Every packet begins with **one** byte indicating the packet ID and then the **content** follows. Packets can be split if they are too large but this behavior is automatically corrected by the buffer manager.
 
 Type | Size (bytes) | Notes
--- | -- | --
+--- | --- | ---
 **Packet ID** | 1 | There can be 256 different packets, but in practice there are only a few. Sending an unknown packet ID will immediately close the connection.
 **Content** | ≥ 0 | Packets can have an empty body
 
@@ -46,7 +46,7 @@ Some packets might be missing and their purposes haven't been totally discovered
 Packets sent from the client to the server.
 
 Packet ID | Arbitrary name | Purpose
--- | -- | --
+--- | --- | ---
 `0x00` | User ID | Sent at the begining of the connection, contains the ID of the player.
 `0x01` | Player control | Contains the location of the mouse, if the player is shooting and the state of the 4-directional keys
 `0x02` | Start game | Contains the nickname entered by the player
@@ -57,7 +57,7 @@ Packet ID | Arbitrary name | Purpose
 Packets sent from the server to the client.
 
 Packet ID | Arbitrary name | Purpose
--- | -- | --
+--- | --- | ---
 `0x00` | ??? | ???
 `0x02` | ??? | Contains **sometimes** the shop data and the leaderboard (?)
 `0x04` | Server location | Tells the client its location
