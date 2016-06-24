@@ -87,6 +87,7 @@ Field | Type | Notes
 Upgrade ID | uint8 | The upgrade level doesn't matter
 
 Upgrades IDs can be found in the following table.
+
 Upgrade | Code (byte)
 --- | ---
 Health regeneration | `0x0e`
