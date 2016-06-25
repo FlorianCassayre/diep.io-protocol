@@ -28,6 +28,7 @@ Name | Size (bytes) | Data range | Notes
 **float32** | 4 | A floating point number | Floating point number with 32-bit precision
 **float64** | 8 | A floating point number | Floating point number with 64-bit precision
 **String** | ≥ 1 | A variable-length UTF-8 string | The string ends when byte `0x00` is reached
+**T[i]** | ? | A fixed size array of a type | Arrays can contain any type of data
 
 ## Packet format
 
@@ -52,7 +53,8 @@ Packet ID | Arbitrary name | Purpose
 `0x00` | User ID | Sent at the begining of the connection, contains the ID of the player.
 `0x01` | Player control | Contains the location of the mouse, if the player is shooting and the state of the 4-directional keys
 `0x02` | Start game | Contains the nickname entered by the player
-`0x03` | Choose upgrade | Tells the server which upgrade the player wants to choose
+`0x03` | Tank upgrade | Tells the server which upgrade the player wants to choose
+`0x04` | Tank evolution | Tells the server which evolution the player wants to choose
 `0x05` | Heartbeat | The server checks if the player is still online. This packet is sent every 0.1 second.
 
 #### `0x00` User ID
@@ -81,7 +83,7 @@ Field | Type | Notes
 --- | --- | ---
 Nickname | String | Nicknames must be between 0 and 15 characters long
 
-#### `0x03` Choose upgrade
+#### `0x03` Tank upgrade
 Field | Type | Notes
 --- | --- | ---
 Upgrade ID | uint8 | The upgrade level doesn't matter
@@ -98,6 +100,48 @@ Bullet penetration | `0x06`
 Bullet damage | `0x04`
 Reload | `0x02`
 Movement speed | `0x00`
+
+#### `0x04` Tank evolution
+Field | Type | Notes
+--- | --- | ---
+Tank ID | uint8 | Each tank has its own ID
+
+Tanks IDs are as following.
+
+Tier | Levels requiered
+--- | ---
+**0** | 0
+**1** | 15
+**2** | 30
+**3** | 45
+
+Tier | Tank name | Obtainable after | Code (byte)
+--- | --- | --- | ---
+1 | Twin | Normal | `0x02`
+1 | Flank Guard | Normal | `0x10`
+1 | Machine Gun | Normal | `0x0e`
+1 | Sniper | Normal | `0x0c`
+2 | Triple Shot | Twin | `0x06`
+2 | Twin Flank | Twin **OR** Flank Guard | `0x1a`
+2 | Quad Tank | Twin **OR** Flank Guard | `0x08`
+2 | Tri Angle | Flank Guard | `0x12`
+2 | Destroyer | Machine Gun | `0x14`
+2 | Gunner | Machine Gun | `0x28`
+2 | Assassin | Sniper | `0x1e`
+2 | Overseer | Sniper | `0x16`
+2 | Hunter | Sniper | `0x26`
+3 | Triplet | Triple Shot | `0x04`
+3 | Penta Shot | Triple Shot | `0x1c`
+3 | Triple Twin | Twin Flank | `0x24`
+3 | Octo Tank | Twin Flank **OR** Quad Tank | `0x0a`
+3 | Booster | Tri Angle | `0x2e`
+3 | Fighter | Tri Angle | `0x30`
+3 | Hybrid | Destroyer | `0x32`
+3 | Stalker | Assassin | `0x2a`
+3 | Ranger | Assassin | `0x2c`
+3 | Manager | Overseer | `0x34`
+3 | Overlord | Overseer | `0x18`
+3 | Necromancer | Overseer | `0x22`
 
 #### `0x05` Heartbeat
 This packet is empty.
@@ -118,11 +162,16 @@ Packet ID | Arbitrary name | Purpose
 #### `0x00` ???
 Field | Type | Notes
 --- | --- | ---
+Counter | uint8 | Counts from 128 to 255 (?)
 ??? | ??? | ???
 
 #### `0x02` ???
 Field | Type | Notes
 --- | --- | ---
+??? | ??? | ???
+Nicknames | String[10] | 10 best players on the server
+??? | ??? | ???
+Scores | float32[10] | And their score
 ??? | ??? | ???
 
 #### `0x04` Server location
